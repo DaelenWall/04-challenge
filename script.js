@@ -37,18 +37,19 @@ var questions = [
 var scoreSet = 0;
 var qDisplay = 0;
 var intervalTest = 0;
-var yikes = 5;
-var timeLeft = 50;
+var wrongAnswer = 20;
+var timeLeft = 100;
 
 
 // start button function
 startBtn.addEventListener("click", function(){
-    if (intervalTest == 0) {
+    if (intervalTest === 0) {
         intervalTest = setInterval(function(){
             timeLeft--;
             timer.textContent = "Time: " + timeLeft;
                 if (timeLeft <= 0) {
                     clearInterval(intervalTest);
+                    allDone();
                     timer.textContent = "No Time Left!";
                 }
         }, 1000);
@@ -82,16 +83,16 @@ function compare(event) {
 
     if (userChoice.matches("li")) {
 
-        var createDiv = document.createElement("div");
-        createDiv.setAttribute("id", "createDiv");
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("id", "newDiv");
 
         if (userChoice.textContent == questions[qDisplay].correctAnswer) {
             scoreSet++;
-            createDiv.textContent = "Correct!";
+            newDiv.textContent = "Correct! The answer was: " + questions[qDisplay].correctAnswer;
         } else {
-            timeLeft = timeLeft - yikes;
-            scoreSet--;
-            createDiv.textContent = "Incorrect! The correct answer was: " + questions[qDisplay].correctAnswer;
+
+            timeLeft = timeLeft - wrongAnswer;
+            newDiv.textContent = "Incorrect! The correct answer was: " + questions[qDisplay].correctAnswer;
         }
 
     }
@@ -100,9 +101,11 @@ function compare(event) {
 qDisplay++;
     if (qDisplay >= questions.length) {
         allDone();
+        newDiv.textContent = "You got  " + scoreSet + "/" + questions.length;
     } else {
         render(qDisplay);
-    }        
+    }  
+    score.appendChild(newDiv)      
 }
 
 // point total test
@@ -114,16 +117,16 @@ function allDone() {
             var pointTotal = timeLeft
             var newP = document.createElement("p");
             clearInterval(intervalTest);
-            newP.textContent = "Congrats! You got " + pointTotal + " points";
+            newP.textContent = "Nice! You got " + pointTotal + " points";
 
             score.appendChild(newP);
         }
 
-        if (qDisplay >= 0) {
+        if (timeLeft >= 0) {
             var timeLeft2 = timeLeft;
             var newP2 = document.createElement("p");
             clearInterval(intervalTest);
-            newP.textContent = "You got: " + timeLeft2;
+            newP.textContent = "You got: " + timeLeft2 + " points";
 
             score.appendChild(newP2);
         }
@@ -131,25 +134,46 @@ function allDone() {
     var newLabel = document.createElement("label");
     newLabel.setAttribute("id", "createLabel");
     newLabel.textContent = "Name: ";
-    qDisplay.appendChild(newLabel);
+    score.appendChild(newLabel);
 
 //user types...
     var userInput = document.createElement("input");
     userInput.setAttribute("type", "text");
     userInput.textContent = "id", "initials";
-    qDisplay.appendChild(userInput);
+    score.appendChild(userInput);
 
 //submit button and user is done
     var submitBtn = document.createElement("button");
     submitBtn.setAttribute("type", "submit");
     submitBtn.setAttribute("id", "submit");
     submitBtn.textContent = "Submit";
-    qDisplay.appendChild(submitBtn);
+    score.appendChild(submitBtn);
 
 
-// local storage next. will probably pull from previous lessons.  
+// local storage - pulled from previous lessons
+// link
+    submitBtn.addEventListener("click", function() {
+        var userInfo = userInput.value;
 
-// need to connect label/input/button to local storage too.  will need a click function.
+        if (userInfo === null) {
+            userInfo = userInfo
+        } else {
+            var finalScore = {
+            userInfo: userInfo,
+            scoreSet: timeLeft2
+            }
+            var scoreStorage = localStorage.getItem("scoreStorage");
+            if (scoreStorage === null) {
+            scoreStorage = [];
+            } else {
+            scoreStorage = JSON.parse(scoreStorage);
+            }
+            scoreStorage.push(finalScore);
+            var stringifyScore = JSON.stringify(scoreStorage);
+            localStorage.setItem("scoreStorage", stringifyScore);
+            window.location.replace("./Highscores.html");
+        }
+    });
 
 
 }
