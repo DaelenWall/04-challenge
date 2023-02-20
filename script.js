@@ -18,9 +18,9 @@ var questions = [
         correctAnswer: "Syntax"
     },
     {
-        question: "In JavaScript, what element is used to store and manipulate text usually in multiples?",
-        choices: ["Arrays", "Function", "Strings", "Variables"],
-        correctAnswer: "Strings"
+        question: "What is the name of the statement that is used to exit or end a loop?",
+        choices: ["Close Statement", "Falter Statement", "Conditional Statement", "Break Statement"],
+        correctAnswer: "Break Statement"
     },
     {
         question: "What is the element called that is used to describe the set of variables, objects, and functions you explicitly have access to?",
@@ -37,7 +37,7 @@ var questions = [
 var scoreSet = 0;
 var qDisplay = 0;
 var intervalTest = 0;
-var yikes = 10;
+var yikes = 5;
 var timeLeft = 50;
 
 
@@ -77,19 +77,80 @@ function render(qDisplay) {
             })
 }
 
-// if correctAnswer is chosen by user = correct
 function compare(event) {
-    var bananas = event.target;
-    if (bananas.matches("li")) {
-        var newDiv = document.createElement("div");
-        newDiv.setAttribute("id", "createDiv");
-            if (bananas.textContent == questions   [qDisplay].correctAnswer) {
-                scoreSet++;
-                newDiv.textContent = "Correct!"
-            } else {
-                timeLeft = timeLeft - yikes;
-                newDiv.textContent = "Incorrect... The correct answer was: " + questions[qDisplay].correctAnswer;
-            }
+    var userChoice = event.target;
+
+    if (userChoice.matches("li")) {
+
+        var createDiv = document.createElement("div");
+        createDiv.setAttribute("id", "createDiv");
+
+        if (userChoice.textContent == questions[qDisplay].correctAnswer) {
+            scoreSet++;
+            createDiv.textContent = "Correct!";
+        } else {
+            timeLeft = timeLeft - yikes;
+            scoreSet--;
+            createDiv.textContent = "Incorrect! The correct answer was: " + questions[qDisplay].correctAnswer;
+        }
+
     }
+
+// I want questions to keep going after choice selection
+qDisplay++;
+    if (qDisplay >= questions.length) {
+        allDone();
+    } else {
+        render(qDisplay);
+    }        
+}
+
+// point total test
+function allDone() {
+    timer.innerHTML="";
+    score.innerHTML="";
+    
+        if (timeLeft >= 0) {
+            var pointTotal = timeLeft
+            var newP = document.createElement("p");
+            clearInterval(intervalTest);
+            newP.textContent = "Congrats! You got " + pointTotal + " points";
+
+            score.appendChild(newP);
+        }
+
+        if (qDisplay >= 0) {
+            var timeLeft2 = timeLeft;
+            var newP2 = document.createElement("p");
+            clearInterval(intervalTest);
+            newP.textContent = "You got: " + timeLeft2;
+
+            score.appendChild(newP2);
+        }
+// highscore preparation
+    var newLabel = document.createElement("label");
+    newLabel.setAttribute("id", "createLabel");
+    newLabel.textContent = "Name: ";
+    qDisplay.appendChild(newLabel);
+
+//user types...
+    var userInput = document.createElement("input");
+    userInput.setAttribute("type", "text");
+    userInput.textContent = "id", "initials";
+    qDisplay.appendChild(userInput);
+
+//submit button and user is done
+    var submitBtn = document.createElement("button");
+    submitBtn.setAttribute("type", "submit");
+    submitBtn.setAttribute("id", "submit");
+    submitBtn.textContent = "Submit";
+    qDisplay.appendChild(submitBtn);
+
+
+// local storage next. will probably pull from previous lessons.  
+
+// need to connect label/input/button to local storage too.  will need a click function.
+
+
 }
 
