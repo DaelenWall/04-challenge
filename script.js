@@ -171,7 +171,7 @@ function allDone() {
             scoreStorage.push(finalScore);
             var stringifyScore = JSON.stringify(scoreStorage);
             localStorage.setItem("scoreStorage", stringifyScore);
-            window.location.replace("Highscores.html");
+            window.location.replace("./Highscores.html");
         }
     });
 
