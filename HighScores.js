@@ -14,14 +14,12 @@ var scoreStorage = localStorage.getItem("scoreStorage");
 scoreStorage = JSON.parse(scoreStorage);
 
 // application
-// weird color-coding glitch but doesn't affect anything...
 if (scoreStorage !== null) {
 
     for (var i = 0; i < scoreStorage.length; i++) {
 
         var liNew = document.createElement("li");
-        liNew.textContent = scoreStorage[i].userInfo + ": " + scoreStorage[i].scoreSet + " pts";
-        
+        liNew.textContent = scoreStorage[i].userInfo + scoreStorage[i].scoreSet + " pts"; 
         highScore.appendChild(liNew);
     }
 }
