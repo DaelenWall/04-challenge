@@ -151,7 +151,7 @@ function allDone() {
 
 
 // local storage - pulled from previous lessons
-// link
+//  link
     submitBtn.addEventListener("click", function() {
         var userInfo = userInput.value;
 
@@ -171,7 +171,7 @@ function allDone() {
             scoreStorage.push(finalScore);
             var stringifyScore = JSON.stringify(scoreStorage);
             localStorage.setItem("scoreStorage", stringifyScore);
-            window.location.replace("./Highscores.html");
+            window.location.href("./Highscores.html");
         }
     });
 
